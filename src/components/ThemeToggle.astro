@@ -1,0 +1,28 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<button
+  id="theme-toggle"
+  class="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+  aria-label="Toggle dark mode"
+>
+  <Icon name="mdi:weather-sunny" class="w-12 h-12 hidden dark:inline-block" />
+  <Icon name="mdi:weather-night" class="w-12 h-12 dark:hidden" />
+</button>
+
+<script>
+  const button = document.getElementById('theme-toggle');
+  if (button) {
+    button.addEventListener('click', () => {
+      const html = document.documentElement;
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        html.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+  }
+</script>

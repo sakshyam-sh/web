@@ -20,7 +20,9 @@
 		"typescript": "5.9.3"
 	},
 	"devDependencies": {
-		"wrangler": "4.56.0"
+		"@iconify-json/mdi": "^1.2.3",
+		"astro-icon": "^1.1.5",
+		"wrangler": "4.54.0"
 	},
 	"private": true,
 	"scripts": {
