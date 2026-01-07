@@ -3,33 +3,54 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+).slice(0, 3); // Just the latest 3
 ---
 
 <!doctype html>
 <html lang="en">
-    <head>
-        <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-    </head>
-    <body>
-        <Header />
-        <main class="mx-auto max-w-3xl px-4 py-16">
-            <h1 class="text-3xl font-semibold mb-4">Hi, I’m Sakshyam </h1>
-            <p class="text-base leading-relaxed text-muted-foreground">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main class="container py-16">
+			<section class="intro">
+				<h1>Hi, I’m Sakshyam.</h1>
+				<p>I build things for the web. This is my personal space where I share thoughts on craft, code, and design.</p>
+			</section>
 
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque eligendi facere ea ab, omnis assumenda impedit recusandae atque fugiat repudiandae molestias, culpa distinctio? Esse porro totam enim, praesentium dolores ab.
-            </p>
-        </main>
-
-        <Footer />
-    </body>
+			<section class="latest-posts">
+				<h2 class="section-title">Latest Writing</h2>
+				<ul class="post-list">
+					{posts.map((post) => (
+						<li>
+							<FormattedDate date={post.data.pubDate} />
+							<a href={`/blog/${post.slug}/`}>{post.data.title}</a>
+						</li>
+					))}
+				</ul>
+				<a href="/blog" class="view-all">View all posts →</a>
+			</section>
+		</main>
+		<Footer />
+	</body>
 </html>
-<script is:inline>
-  (function () {
-    const theme = localStorage.getItem('theme');
-    if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  })();
-</script>
+
+<style>
+	.intro { margin: 4rem 0; }
+	h1 { font-size: 2rem; font-weight: 600; }
+	p { font-size: 1.125rem; color: var(--gray); }
+
+	.section-title { font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray); margin-top: 4rem;}
+
+	.post-list { list-style: none; padding: 0; }
+	.post-list li { display: flex; gap: 1rem; margin-bottom: 0.75rem; }
+	.post-list li :global(time) { flex-shrink: 0; width: 100px; color: var(--gray); }
+
+	.view-all { display: inline-block; margin-top: 1rem; font-size: 0.875rem; text-decoration: none; font-weight: 500;}
+</style>
